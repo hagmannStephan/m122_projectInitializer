@@ -19,12 +19,26 @@ check_args() {
         exit 1
     fi
 
-    if [[ ! " ${project_types[@]} " =~ " $2 " ]]; then
+    local valid_type=false
+    for type in "${project_types[@]}"; do
+        if [[ "$type" == "$2" ]]; then
+            valid_type=true
+            break
+        fi
+    done
+
+    if [ "$valid_type" = false ]; then
         echo "Error: $2 is not a valid project type"
         exit 1
     fi
 }
 
+if [ "$#" -ne 3 ]; then
+    # Check if there are three provided arguments
+    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+    exit 1
+fi
 
-check_args $1 $2 $3
+
+check_args "$1" "$2" "$3"
 exit 0
