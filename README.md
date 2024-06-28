@@ -21,3 +21,8 @@ Ich will ein Projekt erstellen, welches automatisch gewisse Projekte für mich i
 ## Projekt ausführen
 1. `chmod +x projectInitializer.sh`
 2. `./projectInitializer <args>`
+
+### Projekt testen
+1. `sudo apt update; sudo apt install bats` (Wenn noch nicht vorhanden)
+2. `sudo apt update; sudo apt install shellcheck` (Wenn noch nicht vorhanden)
+3. `bats projectInitializer.sh`

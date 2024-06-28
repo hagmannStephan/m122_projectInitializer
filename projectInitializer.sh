@@ -18,7 +18,13 @@ check_args() {
         echo "Error: $3 is not a valid directory"
         exit 1
     fi
+
+    if [[ ! " ${project_types[@]} " =~ " $2 " ]]; then
+        echo "Error: $2 is not a valid project type"
+        exit 1
+    fi
 }
 
 
 check_args $1 $2 $3
+exit 0
