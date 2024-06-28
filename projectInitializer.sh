@@ -50,6 +50,26 @@ copy_template() {
     echo "Success: Project $1 created in $3"
 }
 
+init_git() {
+    # Initialize a git repository if desired
+    read -r -p "Do you want to initialize a git repository? (yes/no): " answer
+    if [ "$answer" == "yes" ]; then
+        cd "$3/$1"
+        git init
+        git branch -m main
+        
+        read -r -p "Do you want to add a remote repository? (yes/no): " remote_answer
+        if [ "$remote_answer" == "yes" ]; then
+            read -r -p "Enter the URL of the remote repository: " remote_url
+            git remote add origin "$remote_url"
+        fi
+        
+        echo "Git repository initialized"
+    else
+        echo "Git repository not initialized"
+    fi
+}
+
 if [ "$#" -ne 3 ]; then
     # Check if there are three provided arguments
     echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
@@ -59,5 +79,7 @@ fi
 
 check_args "$1" "$2" "$3"   # Check if the provided arguments are valid
 copy_template "$1" "$2" "$3" # Copy the template to the desired desitnation
+init_git "$1" "$2" "$3"      # Initialize a git repository if desired
 
+echo "Project initialized successfully"
 exit 0
