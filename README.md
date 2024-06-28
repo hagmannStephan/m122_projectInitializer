@@ -13,6 +13,7 @@ Ich will ein Projekt erstellen, welches automatisch gewisse Projekte für mich i
 - Ich als Nutzer werde gefragt, wenn ich das Skript gestartet habe, ob ich ein .env File mit Variablen erstellen will.
 - Ich als Nutzer werde informiert, wenn das Skript korrekt ausgeführt wurde.
 - Ich als Nutzer werde informiert, wenn es einen Fehler bei der Ausführung des Skriptes gab.
+- Ich als Nutzer kann, wenn ich das Skript mit der -h bzw. --help Flag ausführe, eine Dokumentation zum Befehl sehen
 
 ### Anforderungen
 - Alle Use Cases werden vom Skript erfüllt.
