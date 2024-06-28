@@ -19,10 +19,22 @@
     run ./projectInitializer.sh meinProjekt python /some/made/up/path
     [ "$status" -eq 1 ]
     [ "$output" == "Error: /some/made/up/path is not a valid directory" ]
+    run ./projectInitializer.sh meinProjekt python /
+    [ "$status" -eq 1 ]
+    [ "$output" == "Error: / is not a writable directory" ]
 }
 
 @test "retun 1 if the second param isn't a valid project type" {
-    run ./projectInitializer.sh meinProjekt assembly /
+    run ./projectInitializer.sh meinProjekt assembly ./testDict
     [ "$status" -eq 1 ]
     [ "$output" == "Error: assembly is not a valid project type" ]
+}
+
+@test "retun 0 if the code was executed correctly" {
+    run ./projectInitializer.sh meinProjekt python ./testDict
+    [ "$status" -eq 0 ]
+    [ -d "./testDict/meinProjekt" ]
+    run ./projectInitializer.sh meinProjekt java ./testDict
+    [ "$status" -eq 0 ]
+    [ -d "./testDict/meinProjekt" ]
 }

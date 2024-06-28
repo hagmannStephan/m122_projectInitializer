@@ -10,12 +10,17 @@ check_args() {
     # $3 => project path
 
     if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-        echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+        echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
         exit 1
     fi
 
     if [ ! -d "$3" ]; then
-        echo "Error: $3 is not a valid directory"
+        echo "Error: $3 is not a valid directory" >&2
+        exit 1
+    fi
+
+    if [ ! -w "$3" ]; then
+        echo "Error: $3 is not a writable directory" >&2
         exit 1
     fi
 
@@ -28,22 +33,26 @@ check_args() {
     done
 
     if [ "$valid_type" = false ]; then
-        echo "Error: $2 is not a valid project type"
+        echo "Error: $2 is not a valid project type" >&2
         exit 1
     fi
 }
 
 copy_template() {
+    # Copy the template to the desired destination (Solved so complexy because it did not work just with cp -r)
     if [ "$2" == "python" ]; then
-        cp -r ./templates/python "$3/$1"
+        mkdir -p "$3/$1/api"
+        cp templates/python_flask_api/requirements.txt "$3/$1/"
+        cp ./templates/python_flask_api/api/index.py "$3/$1/api/"
     elif [ "$2" == "java" ]; then
-        cp -r ./templates/java "$3/$1"
+        cp -r ./templates/java_spring_app "$3/$1"
     fi
+    echo "Success: Project $1 created in $3"
 }
 
 if [ "$#" -ne 3 ]; then
     # Check if there are three provided arguments
-    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
     exit 1
 fi
 
