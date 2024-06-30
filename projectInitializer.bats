@@ -1,11 +1,15 @@
 # ------------------------------------
-# Integration tests
+# Static code test
 # ------------------------------------
 
 @test "shellcheck return 0 (static code check)" {
         run shellcheck ./projectInitializer.sh
         [ "$status" -eq 0 ]
 }
+
+# ------------------------------------
+# Integration tests
+# ------------------------------------
 
 @test "return 1 if one of the three arguments is missing" {
     run ./projectInitializer.sh meinProjekt python
