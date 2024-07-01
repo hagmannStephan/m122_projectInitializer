@@ -70,6 +70,57 @@ init_git() {
     fi
 }
 
+setup_venv_python() {
+    # Setup a virtual environment for Python
+    cd "$3/$1"
+
+    echo "Setting up virtual environment..."
+    echo "This may take a while, especially if you are running it in wsgi"
+
+    python3 -m venv venv
+
+    echo "Success: Virtual environment created in $3/$1/venv"
+
+    # Detect the correct OS and activate the virtual environment accordingly
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        source venv/bin/activate
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        source venv/bin/activate
+    elif [[ "$OSTYPE" == "cygwin" ]]; then
+        venv\\Scripts\\activate
+    elif [[ "$OSTYPE" == "msys" ]]; then
+        venv\\Scripts\\activate
+    elif [[ "$OSTYPE" == "win32" ]]; then
+        venv\\Scripts\\activate
+    else
+        echo "Unsupported OS"
+        exit 1
+    fi
+
+    pip install -r requirements.txt
+}
+
+setup_venv_java() {
+    cd "$3/$1"
+
+    echo "Not yet implemented"
+}
+
+setup_venv() {
+    # Check if user desires to setup a virtual environment
+    read -r -p "Do you want to initialize a virtual environment? (yes/no): " answer
+    if [ "$answer" == "yes" ]; then
+        if [ "$2" == "python" ]; then
+            setup_venv_python $1 $2 $3
+        elif [ "$2" == "java" ]; then
+            setup_venv_java $1 $2 $3
+        fi
+        echo "Venv initialized"
+    else
+        echo "Venv not initialized"
+    fi
+}
+
 if [ "$#" -ne 3 ]; then
     # Check if there are three provided arguments
     echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
@@ -80,6 +131,7 @@ fi
 check_args "$1" "$2" "$3"   # Check if the provided arguments are valid
 copy_template "$1" "$2" "$3" # Copy the template to the desired desitnation
 init_git "$1" "$2" "$3"      # Initialize a git repository if desired
+setup_venv "$1" "$2" "$3"
 
 echo "Project initialized successfully"
 exit 0
