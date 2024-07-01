@@ -70,7 +70,7 @@ init_git() {
     fi
 }
 
-setup_venv_python() {
+setup_python() {
     # Setup a virtual environment for Python
     cd "$3/$1"
 
@@ -100,20 +100,23 @@ setup_venv_python() {
     pip install -r requirements.txt
 }
 
-setup_venv_java() {
+setup_java() {
     cd "$3/$1"
 
-    echo "Not yet implemented"
+    echo "Installing the reqirements..."
+
+    mvn clean
+    mvn install
 }
 
-setup_venv() {
+setup_app() {
     # Check if user desires to setup a virtual environment
-    read -r -p "Do you want to initialize a virtual environment? (yes/no): " answer
+    read -r -p "Do you want to set up the application? (yes/no): " answer
     if [ "$answer" == "yes" ]; then
         if [ "$2" == "python" ]; then
-            setup_venv_python $1 $2 $3
+            setup_python $1 $2 $3
         elif [ "$2" == "java" ]; then
-            setup_venv_java $1 $2 $3
+            setup_java $1 $2 $3
         fi
         echo "Venv initialized"
     else
@@ -131,7 +134,7 @@ fi
 check_args "$1" "$2" "$3"   # Check if the provided arguments are valid
 copy_template "$1" "$2" "$3" # Copy the template to the desired desitnation
 init_git "$1" "$2" "$3"      # Initialize a git repository if desired
-setup_venv "$1" "$2" "$3"
+setup_app "$1" "$2" "$3"
 
 echo "Project initialized successfully"
 exit 0
