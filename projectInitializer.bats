@@ -65,6 +65,37 @@
     [[ "${lines[*]}" =~ "Git repository initialized" ]]
 }
 
+@test "return 0 if the code was executed correctly and a venv but no git repo got initialized" {
+    run bash -c 'echo -e "no\nyes" | ./projectInitializer.sh testProject python ./testDict/'
+    [ -d "./testDict/testProject/venv" ]
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "Success: Project testProject created in ./testDict/" ]
+    [ "${lines[1]}" = "Git repository not initialized" ]
+    [ "${lines[2]}" = "Setting up virtual environment..." ]
+    [ "${lines[3]}" = "This may take a while, especially if you are running it in a sub system" ]
+    [ "${lines[-1]}" = "Project initialized successfully" ]
+}
+
+@test "return 0 if the code was executed correctly and a venv and a git repo got without remote got initialized" {
+    [ -d "./testDict" ] && rm -r "./testDict"
+    mkdir ./testDict
+    run bash -c 'echo -e "yes\nno\nyes" | ./projectInitializer.sh testProject python ./testDict'
+    [ "$status" -eq 0 ]
+    [[ "${lines[*]}" =~ "Git repository initialized" ]]
+    [[ "${lines[*]}" =~ "Setting up virtual environment..." ]]
+    [[ "${lines[*]}" =~ "This may take a while, especially if you are running it in a sub system" ]]
+    [ "${lines[-2]}" = "Setup completed" ]
+    [ "${lines[-1]}" = "Project initialized successfully" ]
+}
+
+@test "return 0 if the code was executed correctly and a venv and a git repo got with remote got initialized" {
+
+}
+
+@test "return 0 and helppage if -h is provided as any param" {
+
+}
+
 # ------------------------------------
 # Unit tests
 # ------------------------------------

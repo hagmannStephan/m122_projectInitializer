@@ -2,6 +2,7 @@
 set -euo pipefail
 
 project_types=("python" "java")
+original_dir=$(pwd)
 
 check_args() {
     # Check if the following is true:
@@ -72,6 +73,7 @@ init_git() {
 
 setup_python() {
     # Setup a virtual environment for Python
+    cd "$original_dir"
     cd "$3/$1"
 
     echo "Setting up virtual environment..."
