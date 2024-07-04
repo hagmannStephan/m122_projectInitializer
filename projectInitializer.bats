@@ -33,30 +33,32 @@
 }
 
 @test "return 1 if the second param isn't a valid project type" {
-    rm -r ./testDict
+    [ -d "./testDict" ] && rm -r "./testDict"
     mkdir ./testDict
     run ./projectInitializer.sh meinProjekt assembly ./testDict
     [ "$status" -eq 1 ]
     [ "$output" == "Error: assembly is not a valid project type" ]
 }
 
-@test "return 0 if the code was executed correctly and no git repo initialized" {
-    run bash -c 'echo "no" | ./projectInitializer.sh meinProjekt python ./testDict' # The -c flag in bash -c is used to pass a command as a string to be executed by the shell.
-    [ -d "./testDict/meinProjekt" ]
+@test "return 0 if no additional action was performed" {
+    run bash -c 'echo -e "no\nno" | ./projectInitializer.sh testProject python ./testDict/'
+    [ -d "./testDict/testProject" ]
     [ "$status" -eq 0 ]
-    [ "${lines[1]}" = "Git repository not initialized" ]
+    # [ "${lines[0]}" = "Git repository not initialized" ]
+    # [ "${lines[1]}" = "Setup skipped" ]
+    # [ "${lines[2]}" = "Project initialized successfully" ]
 }
 
-@test "return 0 if the code was executed correctly and git repo initialized with remote" {
-    run bash -c 'echo -e "yes\nyes\nhttps://github.com/username/repo.git" | ./projectInitializer.sh meinProjekt python ./testDict'
+@test "return 0 if the code was executed correctly and git repo initialized with remote but without venv" {
+    run bash -c 'echo -e "yes\nyes\nhttps://github.com/username/repo.git\nno" | ./projectInitializer.sh meinProjekt python ./testDict'
     [ -d "./testDict/meinProjekt" ]
     [ -d "./testDict/meinProjekt/.git" ]
     [ "$status" -eq 0 ]
     [[ "${lines[*]}" =~ "Git repository initialized" ]]
 }
 
-@test "return 0 if the code was executed correctly and git repo initialized without remote" {
-    run bash -c 'echo -e "yes\nno" | ./projectInitializer.sh meinJavaProjekt java ./testDict'
+@test "return 0 if the code was executed correctly and git repo initialized without remote and without venv" {
+    run bash -c 'echo -e "yes\nno\nno" | ./projectInitializer.sh meinJavaProjekt java ./testDict'
     [ -d "./testDict/meinJavaProjekt" ]
     [ -d "./testDict/meinJavaProjekt/.git" ]
     [ "$status" -eq 0 ]

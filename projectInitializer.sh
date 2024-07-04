@@ -26,7 +26,7 @@ check_args() {
 
     local valid_type=false
     for type in "${project_types[@]}"; do
-        if [[ "$type" == "$2" ]]; then
+        if [[ "$type" = "$2" ]]; then
             valid_type=true
             break
         fi
@@ -40,11 +40,11 @@ check_args() {
 
 copy_template() {
     # Copy the template to the desired destination (Solved so complexy because it did not work just with cp -r)
-    if [ "$2" == "python" ]; then
+    if [ "$2" = "python" ]; then
         mkdir -p "$3/$1/api"
         cp templates/python_flask_api/requirements.txt "$3/$1/"
         cp ./templates/python_flask_api/api/index.py "$3/$1/api/"
-    elif [ "$2" == "java" ]; then
+    elif [ "$2" = "java" ]; then
         cp -r ./templates/java_spring_app "$3/$1"
     fi
     echo "Success: Project $1 created in $3"
@@ -53,13 +53,13 @@ copy_template() {
 init_git() {
     # Initialize a git repository if desired
     read -r -p "Do you want to initialize a git repository? (yes/no): " answer
-    if [ "$answer" == "yes" ]; then
+    if [ "$answer" = "yes" ]; then
         cd "$3/$1"
         git init
         git branch -m main
         
         read -r -p "Do you want to add a remote repository? (yes/no): " remote_answer
-        if [ "$remote_answer" == "yes" ]; then
+        if [ "$remote_answer" = "yes" ]; then
             read -r -p "Enter the URL of the remote repository: " remote_url
             git remote add origin "$remote_url"
         fi
@@ -75,7 +75,7 @@ setup_python() {
     cd "$3/$1"
 
     echo "Setting up virtual environment..."
-    echo "This may take a while, especially if you are running it in wsgi"
+    echo "This may take a while, especially if you are running it in a sub system"
 
     python3 -m venv venv
 
@@ -83,15 +83,20 @@ setup_python() {
 
     # Detect the correct OS and activate the virtual environment accordingly
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # shellcheck disable=SC1091
         source venv/bin/activate
     elif [[ "$OSTYPE" == "darwin"* ]]; then
+        # shellcheck disable=SC1091
         source venv/bin/activate
     elif [[ "$OSTYPE" == "cygwin" ]]; then
-        venv\\Scripts\\activate
+        # shellcheck disable=SC1091    
+        source venv/Scripts/activate
     elif [[ "$OSTYPE" == "msys" ]]; then
-        venv\\Scripts\\activate
+        # shellcheck disable=SC1091
+        source venv/Scripts/activate
     elif [[ "$OSTYPE" == "win32" ]]; then
-        venv\\Scripts\\activate
+        # shellcheck disable=SC1091
+        source venv/Scripts/activate
     else
         echo "Unsupported OS"
         exit 1
@@ -112,15 +117,15 @@ setup_java() {
 setup_app() {
     # Check if user desires to setup a virtual environment
     read -r -p "Do you want to set up the application? (yes/no): " answer
-    if [ "$answer" == "yes" ]; then
-        if [ "$2" == "python" ]; then
-            setup_python $1 $2 $3
-        elif [ "$2" == "java" ]; then
-            setup_java $1 $2 $3
+    if [ "$answer" = "yes" ]; then
+        if [ "$2" = "python" ]; then
+            setup_python "$1" "$2" "$3"
+        elif [ "$2" = "java" ]; then
+            setup_java "$1" "$2" "$3"
         fi
-        echo "Venv initialized"
+        echo "Setup completed"
     else
-        echo "Venv not initialized"
+        echo "Setup skipped"
     fi
 }
 
