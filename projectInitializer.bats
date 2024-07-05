@@ -105,8 +105,24 @@
     run ./projectInitializer.sh -h
     [ "$status" -eq 0 ]
     [ "${lines[0]}" = "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" ]
-    [ "${lines[1]}" = "Options:" ]
-    [ "${lines[2]}" = "  -h    Show this help page" ]
+    [ "${lines[1]}" = "Description: This script initializes a project by copying a template to the specified project path and setting up necessary configurations." ]
+    [ "${lines[2]}" = "Options:" ]
+    [ "${lines[3]}" = "  -h, --help    Show this help page" ]
+    [ "${lines[4]}" = "Examples:" ]
+    [ "${lines[5]}" = "  projectInitializer.sh my_project python /path/to/project" ]
+    [ "${lines[6]}" = "  projectInitializer.sh -h" ]
+}
+
+@test "return 0 and helppage if --help is provided as any param" {
+    run ./projectInitializer.sh --help
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" ]
+    [ "${lines[1]}" = "Description: This script initializes a project by copying a template to the specified project path and setting up necessary configurations." ]
+    [ "${lines[2]}" = "Options:" ]
+    [ "${lines[3]}" = "  -h, --help    Show this help page" ]
+    [ "${lines[4]}" = "Examples:" ]
+    [ "${lines[5]}" = "  projectInitializer.sh my_project python /path/to/project" ]
+    [ "${lines[6]}" = "  projectInitializer.sh -h" ]
 }
 
 # ------------------------------------

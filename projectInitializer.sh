@@ -150,10 +150,14 @@ setup_app() {
 }
 
 main() {
-    if [ "$1" = "-h" ]; then
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
         echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+        echo "Description: This script initializes a project by copying a template to the specified project path and setting up necessary configurations."
         echo "Options:"
-        echo "  -h    Show this help page"
+        echo "  -h, --help    Show this help page"
+        echo "Examples:"
+        echo "  projectInitializer.sh my_project python /path/to/project"
+        echo "  projectInitializer.sh -h"
         exit 0
     fi
 
