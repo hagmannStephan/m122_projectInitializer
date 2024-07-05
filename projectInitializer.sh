@@ -131,6 +131,13 @@ setup_app() {
     fi
 }
 
+if [ "$1" = "-h" ]; then
+    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+    echo "Options:"
+    echo "  -h    Show this help page"
+    exit 0
+fi
+
 if [ "$#" -ne 3 ]; then
     # Check if there are three provided arguments
     echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2

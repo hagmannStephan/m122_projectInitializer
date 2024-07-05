@@ -89,11 +89,24 @@
 }
 
 @test "return 0 if the code was executed correctly and a venv and a git repo got with remote got initialized" {
-
+    [ -d "./testDict" ] && rm -r "./testDict"
+    mkdir ./testDict
+    run bash -c 'echo -e "yes\nyes\nhttps://github.com/username/repo.git\nyes" | ./projectInitializer.sh testProject python ./testDict'
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "Success: Project testProject created in ./testDict" ]
+    [[ "${lines[*]}" =~ "Git repository initialized" ]]
+    [[ "${lines[*]}" =~ "Setting up virtual environment..." ]]
+    [[ "${lines[*]}" =~ "This may take a while, especially if you are running it in a sub system" ]]
+    [ "${lines[-2]}" = "Setup completed" ]
+    [ "${lines[-1]}" = "Project initialized successfully" ]
 }
 
 @test "return 0 and helppage if -h is provided as any param" {
-
+    run ./projectInitializer.sh -h
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" ]
+    [ "${lines[1]}" = "Options:" ]
+    [ "${lines[2]}" = "  -h    Show this help page" ]
 }
 
 # ------------------------------------
