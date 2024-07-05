@@ -113,34 +113,49 @@
 # Unit tests
 # ------------------------------------
 
-# @test "Check if script initializes a Git repository when requested" {
-#   run init_git "meinProjekt" "python" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Do you want to initialize a git repository? (yes/no): " ]
+source ./projectInitializer.sh
 
-#   # Simulate user input "yes"
-#   echo "yes" | run init_git "meinProjekt" "python" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Dou you want to add a remote repository? (yes/no): " ]
+@test "Check if arguments are valid" {
+    [ -d "./testDict" ] && rm -r "./testDict"
+    mkdir ./testDict
+    run check_args my_project python ./testDict
+    [ "$status" -eq 0 ]
+}
 
-#   # Simulate user input "yes"
-#   echo "yes" | run init_git "meinProjekt" "python" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Enter the URL of the remote repository: " ]
+@test "Check if project path is a valid directory" {
+    run check_args "my_project" "python" "/path/to/nonexistent_directory"
+    [ "$status" -ne 0 ]
+}
 
-#   # Simulate user input "https://github.com/username/repo.git"
-#   echo "https://github.com/username/repo.git" | run init_git "meinProjekt" "python" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Git repository initialized" ]
-# }
+@test "Check if project type is valid" {
+    run check_args "my_project" "invalid_type" "./testDict"
+    [ "$status" -ne 0 ]
+}
 
-# @test "Check if script does not initialize a Git repository when not requested" {
-#   run init_git "meinJavaProjekt" "java" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Do you want to initialize a git repository? (yes/no): " ]
+@test "Copy template for Java project" {
+    run copy_template "my_project" "java" "./testDict"
+    [ "$status" -eq 0 ]
+    [ -d "./testDict/my_project" ]
+    [ -f "./testDict/my_project/pom.xml" ]
+    [ -d "./testDict/my_project/src" ]
+}
 
-#   # Simulate user input "no"
-#   echo "no" | run init_git "meinJavaProjekt" "java" "./testDict"
-#   [ "$status" -eq 0 ]
-#   [ "${lines[0]}" = "Git repository not initialized" ]
-# }
+@test "Copy template for Python project" {
+    run copy_template "my_project" "python" "./testDict"
+    [ "$status" -eq 0 ]
+    [ -d "./testDict/my_project" ]
+    [ -d "./testDict/my_project/api" ]
+    [ -f "./testDict/my_project/requirements.txt" ]
+}
+
+@test "Initialize git repository" {
+    run init_git "my_project" "python" "./testDict" "test"
+    [ "$status" -eq 0 ]
+    [ -d "./testDict/my_project/.git" ]
+}
+
+@test "Setup Python virtual environment" {
+  run setup_python "my_project" "python" "./testDict"
+  [ "$status" -eq 0 ]
+  [ -d "./testDict/my_project/venv" ]
+}

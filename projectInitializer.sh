@@ -52,16 +52,34 @@ copy_template() {
 }
 
 init_git() {
-    # Initialize a git repository if desired
-    read -r -p "Do you want to initialize a git repository? (yes/no): " answer
+    # If statment check if a test is currently running
+    answer=""
+    remote_answer=""
+    remote_url=""
+    
+    if [ "$#" -eq 4 ]; then
+        answer="yes"
+        remote_answer="yes"
+        remote_url="https://github.com/username/repo.git"
+    fi
+
+    if [ "$answer" != "yes" ]; then
+        read -r -p "Do you want to initialize a git repository? (yes/no): " answer
+    fi
+
     if [ "$answer" = "yes" ]; then
         cd "$3/$1"
         git init
         git branch -m main
         
-        read -r -p "Do you want to add a remote repository? (yes/no): " remote_answer
+        if [ "$remote_answer" != "yes" ]; then
+            read -r -p "Do you want to add a remote repository? (yes/no): " remote_answer
+        fi
+
         if [ "$remote_answer" = "yes" ]; then
-            read -r -p "Enter the URL of the remote repository: " remote_url
+            if [ "$remote_url" != "https://github.com/username/repo.git" ]; then
+                read -r -p "Enter the URL of the remote repository: " remote_url
+            fi
             git remote add origin "$remote_url"
         fi
         
@@ -131,24 +149,31 @@ setup_app() {
     fi
 }
 
-if [ "$1" = "-h" ]; then
-    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
-    echo "Options:"
-    echo "  -h    Show this help page"
+main() {
+    if [ "$1" = "-h" ]; then
+        echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>"
+        echo "Options:"
+        echo "  -h    Show this help page"
+        exit 0
+    fi
+
+    if [ "$#" -ne 3 ]; then
+        # Check if there are three provided arguments
+        echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
+        exit 1
+    fi
+
+    check_args "$1" "$2" "$3"   # Check if the provided arguments are valid
+    copy_template "$1" "$2" "$3" # Copy the template to the desired desitnation
+    init_git "$1" "$2" "$3"      # Initialize a git repository if desired
+    setup_app "$1" "$2" "$3"
+
+    echo "Project initialized successfully"
     exit 0
+}
+
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; 
+then
+ main "$@"
 fi
-
-if [ "$#" -ne 3 ]; then
-    # Check if there are three provided arguments
-    echo "Usage: projectInitializer.sh <project_name> <project_type> <project_path>" >&2
-    exit 1
-fi
-
-
-check_args "$1" "$2" "$3"   # Check if the provided arguments are valid
-copy_template "$1" "$2" "$3" # Copy the template to the desired desitnation
-init_git "$1" "$2" "$3"      # Initialize a git repository if desired
-setup_app "$1" "$2" "$3"
-
-echo "Project initialized successfully"
-exit 0
