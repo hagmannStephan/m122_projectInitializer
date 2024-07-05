@@ -44,9 +44,9 @@
     run bash -c 'echo -e "no\nno" | ./projectInitializer.sh testProject python ./testDict/'
     [ -d "./testDict/testProject" ]
     [ "$status" -eq 0 ]
-    # [ "${lines[0]}" = "Git repository not initialized" ]
-    # [ "${lines[1]}" = "Setup skipped" ]
-    # [ "${lines[2]}" = "Project initialized successfully" ]
+    [[ "${lines[*]}" =~ "Git repository not initialized" ]]
+    [[ "${lines[*]}" =~ "Setup skipped" ]]
+    [[ "${lines[*]}" =~ "Project initialized successfully" ]]
 }
 
 @test "return 0 if the code was executed correctly and git repo initialized with remote but without venv" {
