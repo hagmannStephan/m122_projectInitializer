@@ -56,7 +56,7 @@ init_git() {
     answer=""
     remote_answer=""
     remote_url=""
-    
+
     if [ "$#" -eq 4 ]; then
         answer="yes"
         remote_answer="yes"
@@ -173,7 +173,6 @@ main() {
 }
 
 
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; 
-then
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
  main "$@"
 fi
