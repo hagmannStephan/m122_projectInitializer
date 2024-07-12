@@ -34,6 +34,8 @@ Ich will ein Projekt erstellen, welches automatisch gewisse Projekte für mich i
 4. `chmod +x projectInitializer.sh`
 5. `./projectInitializer <args>`
 
+Die Basisfunktionen des Skriptes werden in folgendem Video aufgezeigt: https://drive.google.com/file/d/1SwEPxquVifyOROZw3Tb8HHMx_QdWKDU0/view?usp=drive_link
+
 ### Projekt testen
 1. Falls nicht vorhanden: `sudo apt install bats`
 2. Falls nicht vorhanden: `sudo apt install shellcheck`
