@@ -25,21 +25,21 @@ Ich will ein Projekt erstellen, welches automatisch gewisse Projekte für mich i
 
 ### Anforderungen
 - Alle Use Cases werden vom Skript erfüllt.
-- Es gibt Tests, mit welchen man das Skript testen kann.
+- Es gibt Tests, um das Skript zu überprüfen.
 
 ## Projekt ausführen
-1. Falls nicht vorhanden: `sudo apt install python3`
-2. Falls nicht vorhanden: `sudo apt install maven`
-3. Falls nicht vorhanden: `sudo apt install default-jdk`
-4. `chmod +x projectInitializer.sh`
-5. `./projectInitializer <args>`
+1. Installiere Python3, falls nicht vorhanden: `sudo apt install python3`
+2. Installiere Maven, falls nicht vorhanden: `sudo apt install maven`
+3. Installiere das JDK, falls nicht vorhanden: `sudo apt install default-jdk`
+4. Mache das Skript ausführbar: `chmod +x projectInitializer.sh`
+5. Führe das Skript aus: `./projectInitializer.sh <Projektname> <Projekttyp> <Pfad>`
 
-Die Basisfunktionen des Skriptes werden in folgendem Video aufgezeigt: https://drive.google.com/file/d/1SwEPxquVifyOROZw3Tb8HHMx_QdWKDU0/view?usp=drive_link
+Die Basisfunktionen des Skripts werden in folgendem Video aufgezeigt: [Video ansehen](https://drive.google.com/file/d/1SwEPxquVifyOROZw3Tb8HHMx_QdWKDU0/view?usp=drive_link)
 
 ### Projekt testen
-1. Falls nicht vorhanden: `sudo apt install bats`
-2. Falls nicht vorhanden: `sudo apt install shellcheck`
-3. `bats projectInitializer.bats`
+1. Installiere Bats, falls nicht vorhanden: `sudo apt install bats`
+2. Installiere Shellcheck, falls nicht vorhanden: `sudo apt install shellcheck`
+3. Führe die Tests aus: `bats projectInitializer.bats`
 
 ### Disclaimer
-Die Applikation wurde auf dem OS `Ubuntu 22.04.4 LTS` entwickelt. Obwohl ein Fokus darauf gelegt wurde, das Skript auf diversen OS ausführen zu können, kann dies nicht garantiert werden.
+Die Applikation wurde auf dem Betriebssystem `Ubuntu 22.04.4 LTS` entwickelt. Obwohl darauf geachtet wurde, dass das Skript auf verschiedenen Betriebssystemen ausgeführt werden kann, kann dies nicht garantiert werden.
